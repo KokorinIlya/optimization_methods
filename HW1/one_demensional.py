@@ -85,11 +85,11 @@ def fib(f, left_border, right_border, n):
     return (right_border + left_border) / 2, right_border - left_border
 
 
-def line_search(f, a, start_delta=0.01, eps=1e-3):
-    start_value = f(a)
-    b = a + start_delta
+def line_search(f, left_border, start_delta=0.01, eps=1e-3):
+    start_value = f(left_border)
+    right_border = left_border + start_delta
     cur_delta = start_delta
-    while f(b) <= start_value + eps:
+    while f(right_border) <= start_value + eps:
         cur_delta *= 2
-        b += cur_delta
-    return b
+        right_border += cur_delta
+    return right_border
