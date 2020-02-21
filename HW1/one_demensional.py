@@ -83,3 +83,13 @@ def fib(f, left_border, right_border, n):
         else:
             return (right_border + left_border) / 2, right_border - left_border
     return (right_border + left_border) / 2, right_border - left_border
+
+
+def line_search(f, a, start_delta=0.01, eps=1e-3):
+    start_value = f(a)
+    b = a + start_delta
+    cur_delta = start_delta
+    while f(b) <= start_value + eps:
+        cur_delta *= 2
+        b += cur_delta
+    return b
