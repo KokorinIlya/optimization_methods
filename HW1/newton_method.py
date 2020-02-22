@@ -8,7 +8,7 @@ def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5):
     while True:
         cur_grad = f_grad(cur_arg)
         cur_hess = f_hess(cur_arg)
-        cur_delta = cur_grad * numpy.linalg.inv(cur_hess)
+        cur_delta = numpy.matmul(cur_grad, numpy.linalg.inv(cur_hess))
         next_arg = cur_arg - cur_delta
         next_value = f(next_arg)
         trace.append(next_arg)
