@@ -4,7 +4,14 @@ from HW1.one_demensional import golden
 from scipy.special import expit
 
 
-# TODO: make it work
+def sign(x):
+    if x >= 0:
+        return 1
+    else:
+        return -1
+
+
+# TODO: use numpy stuff to make it faster
 class Logit:
     def __init__(self, alpha):
         self.alpha = alpha
@@ -16,12 +23,21 @@ class Logit:
         ones = np.ones((objects_count, 1))
         X_r = np.hstack((X, ones))
 
-        start_w = np.ones((features_count + 1, 1))
+        start_w = np.zeros(features_count + 1)
 
         def Q(weights):
-            answers = np.matmul(X_r, weights)
-            margins = answers * y
-            return np.sum(np.logaddexp(0, -margins)) / objects_count
+            result = 0.
+            for i in range(objects_count):
+                cur_object = X_r[i]
+                cur_prediction = np.dot(cur_object, weights)
+                cur_answer = y[i]
+                result += np.logaddexp(0, -cur_prediction * cur_answer)
+            result /= objects_count
+            norm = 0.
+            for i in range(features_count + 1):
+                norm += weights[i] ** 2
+            result += norm * self.alpha / 2
+            return result
 
         A = np.zeros((features_count + 1, objects_count))
         for j in range(features_count + 1):
@@ -29,17 +45,22 @@ class Logit:
                 A[j, i] = -y[i] * X_r[i, j]
 
         def Q_grad(weights):
-            answers = np.matmul(X_r, weights)
-            margins = answers * y
-            b = expit(-margins)
-            return np.matmul(A, b) / objects_count
+            b = np.zeros(objects_count)
+            for i in range(objects_count):
+                cur_object = X_r[i]
+                cur_prediction = np.dot(cur_object, weights)
+                cur_answer = y[i]
+                cur_margin = cur_prediction * cur_answer
+                b[i] = expit(-cur_margin)
+            grad = np.matmul(A, b) / objects_count
+            return grad + self.alpha * weights
 
-        self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'gradient')
+        self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad')[-1]
 
 
 def main():
     logit = Logit(1.)
-    logit.fit(np.array([[1., 2., 3.], [4., 5., 6.]]), np.array([1., -1.]))
+    logit.fit(np.array([[0., 0., 1.], [0., 0., -1.]]), np.array([1., -1.]))
     print(logit.w)
 
 
