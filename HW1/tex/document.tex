@@ -37,11 +37,18 @@ $$Q(w) = \frac{1}{L}\sum\limits_{i = 1}^L ln(1 + e^{-\langle\,w,x_i\rangle\cdot 
 $$\frac{\partial Q}{\partial w_j} = \frac{1}{L}\sum\limits_{i = 1}^{L}-\frac{e^{-\langle\,w,x_i\rangle\cdot y_i} \cdot y_i \cdot x_{i, j}}{1 + e^{-\langle\,w,x_i\rangle\cdot y_i}} = -\frac{1}{L}\sum\limits_{i = 1}^{L}\frac{y_i \cdot x_{i, j}}{1 + e^{\langle\,w,x_i\rangle\cdot y_i}} $$
 
 \[ 
-\left( \frac{\partial Q}{\partial w_j} \right)_{F+1} =-\frac{1}{L} A_{F+1, L} \cdot b_{L}
+\left( \frac{\partial Q}{\partial w} \right)_{F+1} =-\frac{1}{L} A_{F+1, L} \cdot b_{L}
 \]
 
 $$A_{j, i} = y_{i} \cdot x_{i, j}$$
 
 $$b_i = \frac{1}{1 + e^{\langle\,w,x_i\rangle\cdot y_i}}$$
+
+$$Q^{l_2}(w) = Q(w) + \frac{\lambda}{2}||w||^2 = Q(w) + \frac{\lambda}{2} \sum\limits_{i = 1}^{F+1}w_i^2$$
+
+$$\frac{\partial Q^{l_2}}{\partial w_j} = \frac{\partial Q}{\partial w_j}  + \lambda \cdot w_j $$
+
+$$\frac{\partial Q^{l_2}}{\partial w} = \frac{\partial Q}{\partial w}  + \lambda \cdot w = -\frac{1}{L} A \cdot b + \lambda w$$
+
 
 \end{document}
