@@ -11,11 +11,13 @@ def sign(x):
         return -1
 
 
-# TODO: use numpy stuff to make it faster
+# TODO: use numpy stuff to make it faster, add newton solver
 class Logit:
-    def __init__(self, alpha):
+    def __init__(self, alpha, solver='gradient'):
+        assert solver in {'gradient'}
         self.alpha = alpha
         self.w = None
+        self.solver = solver
 
     def fit(self, X, y):
         objects_count, features_count = X.shape

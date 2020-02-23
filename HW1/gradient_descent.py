@@ -3,6 +3,7 @@ from HW1.one_demensional import line_search
 
 
 def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-5):
+    assert stop_criterion in {'arg', 'value', 'grad'}
     cur_arg = start_arg
     cur_value = f(cur_arg)
     trace = [cur_arg]

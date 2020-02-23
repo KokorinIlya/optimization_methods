@@ -2,6 +2,7 @@ import numpy
 
 
 def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5):
+    assert stop_criterion in {'arg', 'value', 'delta'}
     cur_arg = start_arg
     cur_value = f(cur_arg)
     trace = [cur_arg]
