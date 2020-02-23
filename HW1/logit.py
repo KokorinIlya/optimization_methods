@@ -24,7 +24,7 @@ class Logit:
         assert y.shape == (objects_count,)
         X_r = Logit.__add_feature(X)
 
-        start_w = np.zeros(features_count + 1)
+        start_w = np.random.normal(loc=0., scale=1., size=features_count + 1)
 
         def Q(weights):
             result = 0.
@@ -37,8 +37,8 @@ class Logit:
             norm = 0.
             for i in range(features_count + 1):
                 norm += weights[i] ** 2
-            result += norm * self.alpha / 2
-            return result
+            norm *= self.alpha / 2
+            return result + norm
 
         def Q_grad(weights):
             grad = np.zeros(features_count + 1)
@@ -48,10 +48,11 @@ class Logit:
                     cur_answer = y[i]
                     cur_prediction = np.dot(cur_object, weights)
                     grad[j] -= (cur_answer * cur_object[j]) / (1 + math.exp(cur_prediction * cur_answer))
-            return grad / objects_count
+            grad /= objects_count
+            return grad + self.alpha * weights
 
-        self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad')[-1]
+        self.w = gradient_descent(Q, Q_grad, start_w, lambda x, y, z: 0.01, 'grad', eps=1e-9)[-1]
 
     def predict(self, X):
         X_r = Logit.__add_feature(X)
-        return np.sign(np.matmul(X_r, self.w))
+        return np.sign(np.matmul(X_r, self.w)).astype(int)
