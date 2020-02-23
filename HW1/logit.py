@@ -4,13 +4,6 @@ from HW1.one_demensional import golden
 from scipy.special import expit
 
 
-def sign(x):
-    if x >= 0:
-        return 1
-    else:
-        return -1
-
-
 # TODO: use numpy stuff to make it faster, add newton solver
 class Logit:
     def __init__(self, alpha, solver='gradient'):
@@ -19,11 +12,16 @@ class Logit:
         self.w = None
         self.solver = solver
 
+    @staticmethod
+    def __add_feature(X):
+        objects_count, _ = X.shape
+        ones = np.ones((objects_count, 1))
+        return np.hstack((X, ones))
+
     def fit(self, X, y):
         objects_count, features_count = X.shape
         assert y.shape == (objects_count,)
-        ones = np.ones((objects_count, 1))
-        X_r = np.hstack((X, ones))
+        X_r = Logit.__add_feature(X)
 
         start_w = np.zeros(features_count + 1)
 
@@ -58,3 +56,7 @@ class Logit:
             return grad + self.alpha * weights
 
         self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad')[-1]
+
+    def predict(self, X):
+        X_r = Logit.__add_feature(X)
+        return np.sign(np.matmul(X_r, self.w))
