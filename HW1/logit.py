@@ -2,6 +2,7 @@ import numpy as np
 from HW1.gradient_descent import gradient_descent, linear_step_chooser
 from HW1.one_demensional import golden
 from scipy.special import expit
+import math
 
 
 # TODO: use numpy stuff to make it faster, add newton solver
@@ -31,7 +32,7 @@ class Logit:
                 cur_object = X_r[i]
                 cur_prediction = np.dot(cur_object, weights)
                 cur_answer = y[i]
-                result += np.logaddexp(0, -cur_prediction * cur_answer)
+                result += math.log(1 + math.exp(-cur_prediction * cur_answer))
             result /= objects_count
             norm = 0.
             for i in range(features_count + 1):
@@ -39,21 +40,15 @@ class Logit:
             result += norm * self.alpha / 2
             return result
 
-        A = np.zeros((features_count + 1, objects_count))
-        for j in range(features_count + 1):
-            for i in range(objects_count):
-                A[j, i] = -y[i] * X_r[i, j]
-
         def Q_grad(weights):
-            b = np.zeros(objects_count)
-            for i in range(objects_count):
-                cur_object = X_r[i]
-                cur_prediction = np.dot(cur_object, weights)
-                cur_answer = y[i]
-                cur_margin = cur_prediction * cur_answer
-                b[i] = expit(-cur_margin)
-            grad = np.matmul(A, b) / objects_count
-            return grad + self.alpha * weights
+            grad = np.zeros(features_count + 1)
+            for j in range(features_count + 1):
+                for i in range(objects_count):
+                    cur_object = X_r[i]
+                    cur_answer = y[i]
+                    cur_prediction = np.dot(cur_object, weights)
+                    grad[j] -= (cur_answer * cur_object[j]) / (1 + math.exp(cur_prediction * cur_answer))
+            return grad / objects_count
 
         self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad')[-1]
 

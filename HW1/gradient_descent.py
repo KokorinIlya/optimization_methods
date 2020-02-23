@@ -16,6 +16,7 @@ def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-
         if (stop_criterion == 'arg' and numpy.linalg.norm(next_arg - cur_arg) < eps) or \
                 (stop_criterion == 'value' and abs(next_value - cur_value) < eps) or \
                 (stop_criterion == 'grad' and numpy.linalg.norm(cur_grad) < eps):
+            # print(next_value, next_arg, cur_grad)
             return trace
         cur_arg = next_arg
         cur_value = next_value
