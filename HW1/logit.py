@@ -56,13 +56,3 @@ class Logit:
             return grad + self.alpha * weights
 
         self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad')[-1]
-
-
-def main():
-    logit = Logit(1.)
-    logit.fit(np.array([[0., 0., 1.], [0., 0., -1.]]), np.array([1., -1.]))
-    print(logit.w)
-
-
-if __name__ == '__main__':
-    main()

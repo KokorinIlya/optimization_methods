@@ -30,7 +30,9 @@
 	\maketitle
 	
 \section{Логистическая регрессия}
-$$a(x) = \langle\,w,x\rangle$$
+$$a(x) = sign(\langle\,w,x\rangle)$$
+
+$$p_+(x) = \sigma(\langle\,w,x\rangle)$$
 
 $$Q(w) = \frac{1}{L}\sum\limits_{i = 1}^L ln(1 + e^{-\langle\,w,x_i\rangle\cdot y_i})$$
 
