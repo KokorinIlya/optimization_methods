@@ -1,0 +1,47 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\lstset{
+	language=Octave,
+	frame=single,
+	xleftmargin=.1\textwidth, xrightmargin=.1\textwidth
+}
+\usepackage{graphicx}
+\usepackage{mathtools, nccmath}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2.1cm,bindingoffset=0cm]{geometry}
+\usepackage{amsfonts}
+\usepackage{minted}
+\usepackage{amssymb}
+\usepackage{textcomp}
+
+\graphicspath{{/pic}}
+\DeclarePairedDelimiter{\nint}\lfloor\rfloor
+\DeclarePairedDelimiter{\hint}\lceil\rceil
+
+\title{Методы оптимизации, лабораторная № 1}
+
+\Large
+
+\begin{document}
+	\maketitle
+	
+\section{Логистическая регрессия}
+$$a(x) = \langle\,w,x\rangle$$
+
+$$Q(w) = \frac{1}{L}\sum\limits_{i = 1}^L ln(1 + e^{-\langle\,w,x_i\rangle\cdot y_i})$$
+
+$$\frac{\partial Q}{\partial w_j} = \frac{1}{L}\sum\limits_{i = 1}^{L}-\frac{e^{-\langle\,w,x_i\rangle\cdot y_i} \cdot y_i \cdot x_{i, j}}{1 + e^{-\langle\,w,x_i\rangle\cdot y_i}} = -\frac{1}{L}\sum\limits_{i = 1}^{L}\frac{y_i \cdot x_{i, j}}{1 + e^{\langle\,w,x_i\rangle\cdot y_i}} $$
+
+\[ 
+\left( \frac{\partial Q}{\partial w_j} \right)_{F+1} =-\frac{1}{L} A_{F+1, L} \cdot b_{L}
+\]
+
+$$A_{j, i} = y_{i} \cdot x_{i, j}$$
+
+$$b_i = \frac{1}{1 + e^{\langle\,w,x_i\rangle\cdot y_i}}$$
+
+\end{document}
