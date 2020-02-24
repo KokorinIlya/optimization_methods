@@ -6,6 +6,12 @@ from scipy.special import expit
 import math
 
 
+class NumberOfSteps:
+    def __init__(self, errors, steps):
+        self.errors = errors
+        self.steps = steps
+
+
 class Logit:
     def __init__(self, alpha, solver, max_errors=100):
         assert solver in {'gradient', 'newton'}
@@ -59,17 +65,21 @@ class Logit:
 
         if self.solver == 'gradient':
             # TODO: fastest descent
-            self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad', eps=1e-5,
-                                      debug_iters=debug_iters)[-1]
+            trace = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad', eps=1e-5,
+                                     debug_iters=debug_iters)
+            self.w = trace[-1]
+            return NumberOfSteps(0, len(trace))
         else:
             errors = 0
             while True:
                 try:
                     if errors >= self.max_errors:
                         self.w = start_w
+                        return NumberOfSteps(errors, -1)
                     else:
-                        self.w = newton(Q, Q_grad, Q_hess, start_w, 'delta', eps=1e-9, cho=True)[-1]
-                    break
+                        trace = newton(Q, Q_grad, Q_hess, start_w, 'delta', eps=1e-9, cho=True)
+                        self.w = trace[-1]
+                        return NumberOfSteps(errors, len(trace))
                 except ArithmeticError:
                     errors += 1
                     start_w = np.random.normal(loc=0., scale=1., size=features_count + 1)
