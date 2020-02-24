@@ -30,11 +30,19 @@
 	\maketitle
 	
 \section{Логистическая регрессия}
+
+\subsection{Вычисление ответа}
 $$a(x) = sign(\langle\,w,x\rangle)$$
 
 $$p_+(x) = \sigma(\langle\,w,x\rangle)$$
 
+\subsection{Функционал качества}
+
 $$Q(w) = \frac{1}{L}\sum\limits_{i = 1}^L ln(1 + e^{-\langle\,w,x_i\rangle\cdot y_i})$$
+
+$$Q^{l_2}(w) = Q(w) + \frac{\lambda}{2}||w||^2 = Q(w) + \frac{\lambda}{2} \sum\limits_{i = 1}^{F+1}w_i^2$$
+
+\subsection{Градиент}
 
 $$\frac{\partial Q}{\partial w_j} = \frac{1}{L}\sum\limits_{i = 1}^{L}-\frac{e^{-\langle\,w,x_i\rangle\cdot y_i} \cdot y_i \cdot x_{i, j}}{1 + e^{-\langle\,w,x_i\rangle\cdot y_i}} = -\frac{1}{L}\sum\limits_{i = 1}^{L}\frac{y_i \cdot x_{i, j}}{1 + e^{\langle\,w,x_i\rangle\cdot y_i}} $$
 
@@ -44,13 +52,13 @@ $$\frac{\partial Q}{\partial w_j} = \frac{1}{L}\sum\limits_{i = 1}^{L}-\frac{e^{
 
 $$A_{j, i} = y_{i} \cdot x_{i, j}$$
 
-$$b_i = \frac{1}{1 + e^{\langle\,w,x_i\rangle\cdot y_i}}$$
-
-$$Q^{l_2}(w) = Q(w) + \frac{\lambda}{2}||w||^2 = Q(w) + \frac{\lambda}{2} \sum\limits_{i = 1}^{F+1}w_i^2$$
+$$b_i = \frac{1}{1 + e^{\langle\,w,x_i\rangle\cdot y_i}}$$s
 
 $$\frac{\partial Q^{l_2}}{\partial w_j} = \frac{\partial Q}{\partial w_j}  + \lambda \cdot w_j $$
 
 $$\frac{\partial Q^{l_2}}{\partial w} = \frac{\partial Q}{\partial w}  + \lambda \cdot w = -\frac{1}{L} A \cdot b + \lambda w$$
+
+\subsection{Гессиан}
 
 $$\frac{\partial^2 Q}{\partial w_j \partial w_k} = \frac{\partial}{\partial w_k} \frac{\partial Q}{\partial w_j} = \frac{1}{L}\sum\limits_{i = 1}^{L} \frac{x_{i, j} \cdot x_{i, k} \cdot y_i^2 \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{(e^{\langle\,w,x_i\rangle \cdot y_i} + 1)^2} = \frac{1}{L}\sum\limits_{i = 1}^{L} \frac{x_{i, j} \cdot x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{(e^{\langle\,w,x_i\rangle \cdot y_i} + 1)^2}$$
 
@@ -62,13 +70,14 @@ $$A_{j, i} = \frac{x_{i, j}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
 
 $$B_{i, k} = \frac{x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
 
+$$\frac{\partial^2 Q^{l_2}}{\partial w_j \partial w_k} = \frac{\partial^2 Q}{\partial w_j \partial w_k} + \lambda \frac{\partial w_j}{\partial w_k}$$
+
 \[\frac{\partial w_j}{\partial w_k} = \begin{cases} 
       0 & j \neq k\\
      1 & j = k \\
    \end{cases}
 \]
 
-$$\frac{\partial^2 Q^{l_2}}{\partial w_j \partial w_k} = \frac{\partial^2 Q}{\partial w_j \partial w_k} + \lambda \frac{\partial w_j}{\partial w_k}$$
 
 $$\frac{\partial^2 Q^{l_2}}{\partial^2 w} = \frac{\partial^2 Q}{\partial^2 w} + \lambda I_{F+1}$$
 
