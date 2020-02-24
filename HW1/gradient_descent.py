@@ -4,7 +4,6 @@ from HW1.one_demensional import line_search
 
 def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-5):
     assert stop_criterion in {'arg', 'value', 'grad'}
-    iters = 0
     cur_arg = start_arg
     cur_value = f(cur_arg)
     trace = [cur_arg]
@@ -14,15 +13,9 @@ def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-
         next_arg = cur_arg - cur_step * cur_grad
         next_value = f(next_arg)
         trace.append(next_arg)
-
-        iters += 1
-        if iters % 10000 == 0:
-            print('iters =', iters, next_value, next_arg, cur_grad, numpy.linalg.norm(cur_grad))
-
         if (stop_criterion == 'arg' and numpy.linalg.norm(next_arg - cur_arg) < eps) or \
                 (stop_criterion == 'value' and abs(next_value - cur_value) < eps) or \
                 (stop_criterion == 'grad' and numpy.linalg.norm(cur_grad) < eps):
-            print('finish', next_value, next_arg, cur_grad)
             return trace
         cur_arg = next_arg
         cur_value = next_value
