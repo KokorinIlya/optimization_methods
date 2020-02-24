@@ -43,14 +43,16 @@ class Logit:
             grad = -np.matmul(A, b) / objects_count
             return grad + self.alpha * weights
 
+        # TODO: numpy
         def Q_hess(weights):
             hess = np.zeros((features_count + 1, features_count + 1))
+            predictions = np.matmul(X_r, weights)
             for j in range(features_count + 1):
                 for k in range(features_count + 1):
                     for i in range(objects_count):
                         cur_object = X_r[i]
                         cur_answer = y[i]
-                        cur_prediction = np.dot(cur_object, weights)
+                        cur_prediction = predictions[i]
                         cur_exp = math.exp(cur_prediction * cur_answer)
                         hess[j, k] += (cur_object[j] * cur_object[k] * cur_exp) / ((cur_exp + 1) ** 2)
             hess /= objects_count
