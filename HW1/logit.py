@@ -54,7 +54,7 @@ class Logit:
             multiplied_X = X_r.T * object_multipliers
             hess = multiplied_X @ multiplied_X.T
             hess /= objects_count
-            return hess + alpha * np.eye(features_count + 1)
+            return hess + self.alpha * np.eye(features_count + 1)
 
         if self.solver == 'gradient':
             # TODO: fastest descent
