@@ -26,6 +26,7 @@ def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-
 
 
 def linear_step_chooser(method):
+
     def result(f, grad, arg):
         def linear_optimization_problem(k):
             return f(arg - k * grad)
@@ -34,5 +35,14 @@ def linear_step_chooser(method):
         right_border = line_search(linear_optimization_problem, left_border)
         answer, _ = method(linear_optimization_problem, left_border, right_border)
         return answer
+
+    return result
+
+
+def constant_step_chooser(learning_rate):
+    assert learning_rate > 0
+
+    def result(f, grad, arg):
+        return learning_rate
 
     return result

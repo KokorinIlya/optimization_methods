@@ -3,7 +3,7 @@ import math
 
 def dichotomy(f, left_border, right_border, eps=1e-5):
     iterations = 0
-    delta = eps / 2
+    delta = eps / 4
     while right_border - left_border > eps:
         iterations += 1
         middle = (left_border + right_border) / 2
@@ -53,7 +53,7 @@ def golden(f, left_border, right_border, eps=1e-5):
     return (right_border + left_border) / 2, iterations
 
 
-def fib(f, left_border, right_border, n):
+def fib(f, left_border, right_border, n=60):
     fibs = [1, 1]
     while len(fibs) < n + 1:
         fibs.append(fibs[-1] + fibs[-2])
