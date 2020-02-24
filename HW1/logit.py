@@ -50,9 +50,8 @@ class Logit:
         
         def Q_hess(weights):
             predictions = X_r @ weights
-            exps = np.exp(predictions * y)
-            exp_mul = np.sqrt(np.divide(exps, np.square(exps + 1)))
-            multiplied_X = X_r.T * exp_mul
+            object_multipliers = np.sqrt(0.5 * np.reciprocal(np.cosh(predictions * y) + 1))
+            multiplied_X = X_r.T * object_multipliers
             hess = multiplied_X @ multiplied_X.T
             hess /= objects_count
             return hess + alpha * np.eye(features_count + 1)
