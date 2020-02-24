@@ -29,28 +29,18 @@ class Logit:
         start_w = np.random.normal(loc=0., scale=1., size=features_count + 1)
 
         def Q(weights):
-            result = 0.
-            for i in range(objects_count):
-                cur_object = X_r[i]
-                cur_prediction = np.dot(cur_object, weights)
-                cur_answer = y[i]
-                result += math.log(1 + math.exp(-cur_prediction * cur_answer))
-            result /= objects_count
-            norm = 0.
-            for i in range(features_count + 1):
-                norm += weights[i] ** 2
-            norm *= self.alpha / 2
-            return result + norm
+            predictions = np.matmul(X_r, weights)
+            margins = predictions * y
+            losses = np.logaddexp(0, -margins)
+            return (np.sum(losses) / objects_count) + (np.sum(weights ** 2) * self.alpha / 2)
+
+        A = np.transpose(X_r * y.reshape((objects_count, 1)))
 
         def Q_grad(weights):
-            grad = np.zeros(features_count + 1)
-            for j in range(features_count + 1):
-                for i in range(objects_count):
-                    cur_object = X_r[i]
-                    cur_answer = y[i]
-                    cur_prediction = np.dot(cur_object, weights)
-                    grad[j] -= (cur_answer * cur_object[j]) / (1 + math.exp(cur_prediction * cur_answer))
-            grad /= objects_count
+            predictions = np.matmul(X_r, weights)
+            margins = predictions * y
+            b = expit(-margins)
+            grad = -np.matmul(A, b) / objects_count
             return grad + self.alpha * weights
 
         def Q_hess(weights):

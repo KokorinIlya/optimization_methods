@@ -1,6 +1,7 @@
 import numpy
 
 
+# TODO: scipy.linalg.cho_factor, scipy.linalg.cho_solve
 def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5, max_iters=100):
     assert stop_criterion in {'arg', 'value', 'delta'}
     cur_arg = start_arg
