@@ -52,5 +52,25 @@ $$\frac{\partial Q^{l_2}}{\partial w_j} = \frac{\partial Q}{\partial w_j}  + \la
 
 $$\frac{\partial Q^{l_2}}{\partial w} = \frac{\partial Q}{\partial w}  + \lambda \cdot w = -\frac{1}{L} A \cdot b + \lambda w$$
 
+$$\frac{\partial^2 Q}{\partial w_j \partial w_k} = \frac{\partial}{\partial w_k} \frac{\partial Q}{\partial w_j} = \frac{1}{L}\sum\limits_{i = 1}^{L} \frac{x_{i, j} \cdot x_{i, k} \cdot y_i^2 \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{(e^{\langle\,w,x_i\rangle \cdot y_i} + 1)^2} = \frac{1}{L}\sum\limits_{i = 1}^{L} \frac{x_{i, j} \cdot x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{(e^{\langle\,w,x_i\rangle \cdot y_i} + 1)^2}$$
+
+\[ 
+\left( \frac{\partial^2 Q}{\partial^2 w} \right)_{F+1, F+1} =\frac{1}{L} A_{F+1, L} \cdot B_{L, F+1}
+\]
+
+$$A_{j, i} = \frac{x_{i, j}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
+
+$$B_{i, k} = \frac{x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
+
+\[\frac{\partial w_j}{\partial w_k} = \begin{cases} 
+      0 & j \neq k\\
+     1 & j = k \\
+   \end{cases}
+\]
+
+$$\frac{\partial^2 Q^{l_2}}{\partial w_j \partial w_k} = \frac{\partial^2 Q}{\partial w_j \partial w_k} + \lambda \frac{\partial w_j}{\partial w_k}$$
+
+$$\frac{\partial^2 Q^{l_2}}{\partial^2 w} = \frac{\partial^2 Q}{\partial^2 w} + \lambda I_{F+1}$$
+
 
 \end{document}
