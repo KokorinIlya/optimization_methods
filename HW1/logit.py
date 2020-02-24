@@ -6,7 +6,6 @@ from scipy.special import expit
 import math
 
 
-# TODO: use numpy stuff to make it faster
 class Logit:
     def __init__(self, alpha, solver, max_errors=100):
         assert solver in {'gradient', 'newton'}
@@ -69,7 +68,7 @@ class Logit:
                     if errors >= self.max_errors:
                         self.w = start_w
                     else:
-                        self.w = newton(Q, Q_grad, Q_hess, start_w, 'delta', eps=1e-9)[-1]
+                        self.w = newton(Q, Q_grad, Q_hess, start_w, 'delta', eps=1e-9, cho=True)[-1]
                     break
                 except ArithmeticError:
                     errors += 1

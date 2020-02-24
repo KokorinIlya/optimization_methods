@@ -1,8 +1,9 @@
 import numpy
+from scipy.linalg import cho_factor, cho_solve
 
 
 # TODO: scipy.linalg.cho_factor, scipy.linalg.cho_solve
-def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5, max_iters=100):
+def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5, max_iters=100, cho=False):
     assert stop_criterion in {'arg', 'value', 'delta'}
     cur_arg = start_arg
     cur_value = f(cur_arg)
@@ -10,7 +11,11 @@ def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5, max_iters=100
     while True:
         cur_grad = f_grad(cur_arg)
         cur_hess = f_hess(cur_arg)
-        cur_delta = numpy.matmul(cur_grad, numpy.linalg.inv(cur_hess))
+        if cho:
+            hess_inv = cho_solve(cho_factor(cur_hess), numpy.eye(cur_hess.shape[0]))
+        else:
+            hess_inv = numpy.linalg.inv(cur_hess)
+        cur_delta = numpy.matmul(cur_grad, hess_inv)
         next_arg = cur_arg - cur_delta
         next_value = f(next_arg)
         trace.append(next_arg)
