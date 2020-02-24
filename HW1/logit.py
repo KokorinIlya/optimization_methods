@@ -8,11 +8,12 @@ import math
 
 # TODO: use numpy stuff to make it faster
 class Logit:
-    def __init__(self, alpha, solver='gradient'):
+    def __init__(self, alpha, solver='gradient', max_errors=100):
         assert solver in {'gradient', 'newton'}
         self.alpha = alpha
         self.w = None
         self.solver = solver
+        self.max_errors = max_errors
 
     @staticmethod
     def __add_feature(X):
@@ -71,7 +72,7 @@ class Logit:
             errors = 0
             while True:
                 try:
-                    if errors >= 100:
+                    if errors >= self.max_errors:
                         self.w = start_w
                     else:
                         self.w = newton(Q, Q_grad, Q_hess, start_w, 'delta', eps=1e-9)[-1]
