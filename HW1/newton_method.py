@@ -1,7 +1,8 @@
 import numpy
 
 
-def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5):
+def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5, max_iters=100):
+    iters = 0
     assert stop_criterion in {'arg', 'value', 'delta'}
     cur_arg = start_arg
     cur_value = f(cur_arg)
@@ -13,6 +14,11 @@ def newton(f, f_grad, f_hess, start_arg, stop_criterion, eps=1e-5):
         next_arg = cur_arg - cur_delta
         next_value = f(next_arg)
         trace.append(next_arg)
+
+        iters += 1
+        if iters == max_iters:
+            raise ArithmeticError()
+
         if (stop_criterion == 'arg' and numpy.linalg.norm(next_arg - cur_arg) < eps) or \
                 (stop_criterion == 'value' and abs(next_value - cur_value) < eps) or \
                 (stop_criterion == 'delta' and numpy.linalg.norm(cur_delta) < eps):
