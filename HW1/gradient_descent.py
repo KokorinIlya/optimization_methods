@@ -2,7 +2,7 @@ import numpy.linalg
 from HW1.one_demensional import line_search
 
 
-def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-5):
+def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-5, debug_iters=None):
     assert stop_criterion in {'arg', 'value', 'grad'}
     cur_arg = start_arg
     cur_value = f(cur_arg)
@@ -13,6 +13,10 @@ def gradient_descent(f, f_grad, start_arg, step_chooser, stop_criterion, eps=1e-
         next_arg = cur_arg - cur_step * cur_grad
         next_value = f(next_arg)
         trace.append(next_arg)
+
+        if debug_iters is not None and len(trace) % debug_iters == 0:
+            print('iteration =', len(trace), 'grad =', cur_grad, '||grad|| =', numpy.linalg.norm(cur_grad))
+
         if (stop_criterion == 'arg' and numpy.linalg.norm(next_arg - cur_arg) < eps) or \
                 (stop_criterion == 'value' and abs(next_value - cur_value) < eps) or \
                 (stop_criterion == 'grad' and numpy.linalg.norm(cur_grad) < eps):

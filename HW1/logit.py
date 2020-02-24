@@ -8,7 +8,7 @@ import math
 
 # TODO: use numpy stuff to make it faster
 class Logit:
-    def __init__(self, alpha, solver='gradient', max_errors=100):
+    def __init__(self, alpha, solver, max_errors=100):
         assert solver in {'gradient', 'newton'}
         self.alpha = alpha
         self.w = None
@@ -21,7 +21,7 @@ class Logit:
         ones = np.ones((objects_count, 1))
         return np.hstack((X, ones))
 
-    def fit(self, X, y):
+    def fit(self, X, y, debug_iters=None):
         objects_count, features_count = X.shape
         assert y.shape == (objects_count,)
         X_r = Logit.__add_feature(X)
@@ -67,7 +67,9 @@ class Logit:
             return hess + self.alpha * np.eye(features_count + 1)
 
         if self.solver == 'gradient':
-            self.w = gradient_descent(Q, Q_grad, start_w, lambda x, y, z: 0.01, 'grad', eps=1e-9)[-1]
+            # TODO: fastest descent
+            self.w = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad', eps=1e-5,
+                                      debug_iters=debug_iters)[-1]
         else:
             errors = 0
             while True:
