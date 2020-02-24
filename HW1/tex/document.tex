@@ -68,7 +68,7 @@ $$\frac{\partial^2 Q}{\partial w_j \partial w_k} = \frac{\partial}{\partial w_k}
 
 $$A_{j, i} = \frac{x_{i, j}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
 
-$$B_{i, k} = \frac{x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
+$$B_{i, k} = \frac{x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1} = \frac{x_{i, k} }{1 + e^{-\langle\,w,x_i\rangle \cdot y_i} } $$
 
 $$\frac{\partial^2 Q^{l_2}}{\partial w_j \partial w_k} = \frac{\partial^2 Q}{\partial w_j \partial w_k} + \lambda \frac{\partial w_j}{\partial w_k}$$
 
