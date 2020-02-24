@@ -47,21 +47,14 @@ class Logit:
             b = expit(-margins)
             grad = -np.matmul(A, b) / objects_count
             return grad + self.alpha * weights
-
-        # TODO: numpy
+        
         def Q_hess(weights):
-            hess = np.zeros((features_count + 1, features_count + 1))
-            predictions = np.matmul(X_r, weights)
-            for j in range(features_count + 1):
-                for k in range(features_count + 1):
-                    for i in range(objects_count):
-                        cur_object = X_r[i]
-                        cur_answer = y[i]
-                        cur_prediction = predictions[i]
-                        cur_exp = math.exp(cur_prediction * cur_answer)
-                        hess[j, k] += (cur_object[j] * cur_object[k] * cur_exp) / ((cur_exp + 1) ** 2)
+            predictions = X_r @ weights
+            object_multipliers = np.sqrt(0.5 * np.reciprocal(np.cosh(predictions * y) + 1))
+            multiplied_X = X_r.T * object_multipliers
+            hess = multiplied_X @ multiplied_X.T
             hess /= objects_count
-            return hess + self.alpha * np.eye(features_count + 1)
+            return hess + alpha * np.eye(features_count + 1)
 
         if self.solver == 'gradient':
             # TODO: fastest descent
