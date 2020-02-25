@@ -25,7 +25,7 @@ class Logit:
         ones = np.ones((objects_count, 1))
         return np.hstack((X, ones))
 
-    def fit(self, X, y, debug_iters=None):
+    def fit(self, X, y, debug_iters=None, eps=1e-5):
         objects_count, features_count = X.shape
         assert y.shape == (objects_count,)
         X_r = Logit.__add_feature(X)
@@ -57,7 +57,7 @@ class Logit:
 
         if self.solver == 'gradient':
             # TODO: fastest descent
-            trace = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad', eps=1e-5,
+            trace = gradient_descent(Q, Q_grad, start_w, linear_step_chooser(golden), 'grad', eps=eps,
                                      debug_iters=debug_iters)
             self.w = trace[-1]
             return NumberOfSteps(0, len(trace))
@@ -69,7 +69,7 @@ class Logit:
                         self.w = start_w
                         return NumberOfSteps(errors, -1)
                     else:
-                        trace = newton(Q, Q_grad, Q_hess, start_w, 'delta', eps=1e-9, cho=True)
+                        trace = newton(Q, Q_grad, Q_hess, start_w, 'delta', eps=eps, cho=True)
                         self.w = trace[-1]
                         return NumberOfSteps(errors, len(trace))
                 except ArithmeticError:
