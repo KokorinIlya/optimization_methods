@@ -3,7 +3,6 @@ from HW1.gradient_descent import gradient_descent, linear_step_chooser
 from HW1.newton_method import newton
 from HW1.one_demensional import golden
 from scipy.special import expit
-import math
 
 
 class NumberOfSteps:
