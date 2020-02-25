@@ -63,12 +63,12 @@ $$\frac{\partial Q^{l_2}}{\partial w} = \frac{\partial Q}{\partial w}  + \lambda
 $$\frac{\partial^2 Q}{\partial w_j \partial w_k} = \frac{\partial}{\partial w_k} \frac{\partial Q}{\partial w_j} = \frac{1}{L}\sum\limits_{i = 1}^{L} \frac{x_{i, j} \cdot x_{i, k} \cdot y_i^2 \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{(e^{\langle\,w,x_i\rangle \cdot y_i} + 1)^2} = \frac{1}{L}\sum\limits_{i = 1}^{L} \frac{x_{i, j} \cdot x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{(e^{\langle\,w,x_i\rangle \cdot y_i} + 1)^2}$$
 
 \[ 
-\left( \frac{\partial^2 Q}{\partial^2 w} \right)_{F+1, F+1} =\frac{1}{L} A_{F+1, L} \cdot B_{L, F+1}
+\left( \frac{\partial^2 Q}{\partial^2 w} \right)_{F+1, F+1} =\frac{1}{L} C_{F+1, L} \cdot D_{L, F+1}
 \]
 
-$$A_{j, i} = \frac{x_{i, j}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
+$$C_{j, i} = \frac{x_{i, j}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1}$$
 
-$$B_{i, k} = \frac{x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1} = \frac{x_{i, k} }{1 + e^{-\langle\,w,x_i\rangle \cdot y_i} } $$
+$$D_{i, k} = \frac{x_{i, k} \cdot e^{\langle\,w,x_i\rangle \cdot y_i}}{e^{\langle\,w,x_i\rangle \cdot y_i} + 1} = \frac{x_{i, k} }{1 + e^{-\langle\,w,x_i\rangle \cdot y_i} } $$
 
 $$\frac{\partial^2 Q^{l_2}}{\partial w_j \partial w_k} = \frac{\partial^2 Q}{\partial w_j \partial w_k} + \lambda \frac{\partial w_j}{\partial w_k}$$
 

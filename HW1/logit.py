@@ -47,13 +47,13 @@ class Logit:
             b = expit(-margins)
             grad = -np.matmul(A, b) / objects_count
             return grad + self.alpha * weights
-        
+
         def Q_hess(weights):
-            predictions = X_r @ weights
-            object_multipliers = np.sqrt(0.5 * np.reciprocal(np.cosh(predictions * y) + 1))
-            multiplied_X = X_r.T * object_multipliers
-            hess = multiplied_X @ multiplied_X.T
-            hess /= objects_count
+            predictions = np.matmul(X_r, weights)
+            margins = predictions * y
+            C = np.transpose(X_r * expit(-margins).reshape((objects_count, 1)))
+            D = X_r * expit(margins).reshape((objects_count, 1))
+            hess = np.matmul(C, D) / objects_count
             return hess + self.alpha * np.eye(features_count + 1)
 
         if self.solver == 'gradient':
