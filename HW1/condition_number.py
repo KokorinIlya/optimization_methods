@@ -16,7 +16,7 @@ def create_matrix(condition_number, n):
     return new_A
 
 
-def number_of_iters(cond, n_vars, step_chooser, n_checks=10):
+def number_of_iters(cond, n_vars, step_chooser, n_checks=100):
     avg_iters = 0
     for _ in range(n_checks):
         A = create_matrix(cond, n_vars)
