@@ -1,6 +1,5 @@
 import numpy as np
-import HW1.gradient_descent as gd
-import matplotlib.pyplot as plt
+from HW1.gradient_descent import gradient_descent
 from math import sqrt
 
 
@@ -17,7 +16,7 @@ def create_matrix(k, n):
     return new_A
 
 
-def number_of_iters(cond, n_vars, n_checks=10):
+def number_of_iters(cond, n_vars, step_chooser, n_checks=10):
     avg_iters = 0
     for _ in range(n_checks):
         A = create_matrix(cond, n_vars)
@@ -28,20 +27,7 @@ def number_of_iters(cond, n_vars, n_checks=10):
 
         # print(f(np.linalg.inv(A+A.T).dot(b))) -- optimal value
 
-        trace = gd.gradient_descent(f, f_grad, init_x, gd.constant_step_chooser(1e-3), 'value')
+        trace = gradient_descent(f, f_grad, init_x, step_chooser, 'value')
 
         avg_iters += len(trace)
     return avg_iters / n_checks
-
-
-n_vars = [5, 10, 20, 50, 100]
-condition_numbers = np.linspace(1, 1000, 50)
-for var in n_vars:
-    iters = list(map(lambda cond: number_of_iters(cond, var), condition_numbers))
-    plt.plot(condition_numbers, iters, label='n=' + str(var))
-
-plt.xlabel('Число обусловленности')
-plt.ylabel('Число итераций')
-plt.legend()
-plt.savefig('iterations.pdf')
-plt.show()
