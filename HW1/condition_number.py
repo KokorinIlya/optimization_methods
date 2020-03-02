@@ -3,8 +3,8 @@ from HW1.gradient_descent import gradient_descent
 from math import sqrt
 
 
-def create_matrix(k, n):
-    r = sqrt(k)
+def create_matrix(condition_number, n):
+    r = sqrt(condition_number)
     A = np.random.randn(n, n)
     u, s, v = np.linalg.svd(A)
     h, l = np.max(s), np.min(s)  # highest and lowest eigenvalues (h / l = current cond number)
@@ -12,7 +12,7 @@ def create_matrix(k, n):
     new_s = h * (1 - ((r - 1) / r) / (h - l) * (h - s))
     new_A = (u * new_s) @ v.T  # make inverse transformation (here cond number is sqrt(k))
     new_A = new_A @ new_A.T  # make matrix symmetric and positive semi-definite (cond number is just k)
-    assert np.isclose(np.linalg.cond(new_A), k)
+    assert np.isclose(np.linalg.cond(new_A), condition_number)
     return new_A
 
 
