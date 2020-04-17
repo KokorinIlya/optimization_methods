@@ -3,7 +3,7 @@ import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 
 
-class SimplexMethodResults:
+class LinearProgrammingMethodResults:
     def __init__(self, success, value, x, search_min):
         self.success = success
         self.value = value
@@ -77,7 +77,7 @@ def simplex_method_canon(A, b, c, search_min=True):
                 r = i
                 cur_min = resolving_col[i]
         if r == -1:
-            return SimplexMethodResults(False, q0, [], search_min)
+            return LinearProgrammingMethodResults(False, q0, [], search_min)
 
         # нашли разрешаюший элемент
         resolving_el = A[r][l]
@@ -98,18 +98,18 @@ def simplex_method_canon(A, b, c, search_min=True):
 
     # если значение функции оказалось больше M, то метод разошелся
     if abs(q0) > M:
-        return SimplexMethodResults(False, q0, [], search_min)
+        return LinearProgrammingMethodResults(False, q0, [], search_min)
 
     x = np.zeros(m)
     for i in range(n):
         r = basis[i]
         # если добавочная переменная вошла в базис и не зануляется, то решения не существует
         if r >= m and b[i] / A[i][r] > eps:
-            return SimplexMethodResults(False, q0, x, search_min)
+            return LinearProgrammingMethodResults(False, q0, x, search_min)
         else:
             # если переменная не добавочная, то просто расчитываем ее
             x[r] = b[i] / A[i][r]
-    return SimplexMethodResults(True, q0, x, search_min)
+    return LinearProgrammingMethodResults(True, q0, x, search_min)
 
 
 A = [[1, 0, 0, 1, -2],
