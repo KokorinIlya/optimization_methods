@@ -6,14 +6,17 @@ np.seterr(divide='ignore', invalid='ignore')
 class LinearProgrammingMethodResults:
     def __init__(self, success, value, x, search_min):
         self.success = success
-        self.value = value
+        self._value = value
         self.x = x
         self.search_min = search_min
+
+    def get_value(self):
+        return self._value if self.search_min else -self._value
 
     def __str__(self):
         return 'success: {}\n' \
                'fun: {}\n' \
-               'x: {}\n'.format(self.success, self.value if self.search_min else -self.value, self.x)
+               'x: {}\n'.format(self.success, self.get_value(), self.x)
 
 
 def simplex_method_noncanon(a, b, c, search_min=True) -> LinearProgrammingMethodResults:
