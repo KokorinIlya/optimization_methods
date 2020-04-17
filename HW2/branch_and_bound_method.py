@@ -32,7 +32,7 @@ class BranchAndBoundMethodSolver:
 
     def _solve_impl(self, A, b, c) -> Optional[LinearProgrammingMethodResults]:
         result = simplex_method_noncanon(A, b, c, False)
-        if not result.success or result.get_value() < self.max_bound:
+        if result is None or result.get_value() < self.max_bound:
             return None
         for i, x_i in enumerate(result.x):
             if not BranchAndBoundMethodSolver.is_integral(x_i):

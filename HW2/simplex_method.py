@@ -1,11 +1,12 @@
+from typing import Optional
+
 import numpy as np
 
 np.seterr(divide='ignore', invalid='ignore')
 
 
 class LinearProgrammingMethodResults:
-    def __init__(self, success, value, x, search_min):
-        self.success = success
+    def __init__(self, value, x, search_min):
         self._value = value
         self.x = x
         self.search_min = search_min
@@ -14,12 +15,11 @@ class LinearProgrammingMethodResults:
         return self._value if self.search_min else -self._value
 
     def __str__(self):
-        return 'success: {}\n' \
-               'fun: {}\n' \
-               'x: {}\n'.format(self.success, self.get_value(), self.x)
+        return 'fun: {}\n' \
+               'x: {}\n'.format(self.get_value(), self.x)
 
 
-def simplex_method_noncanon(a, b, c, search_min=True) -> LinearProgrammingMethodResults:
+def simplex_method_noncanon(a, b, c, search_min=True) -> Optional[LinearProgrammingMethodResults]:
     n, m = np.shape(a)
 
     # добавим единичную матрицу чтобы перевести неравенства в равенства
@@ -29,11 +29,13 @@ def simplex_method_noncanon(a, b, c, search_min=True) -> LinearProgrammingMethod
     c = np.hstack((np.array(c, np.float), np.zeros(n, np.float)))
 
     res = simplex_method_canon(a, b, c, search_min)
+    if res is None:
+        return None
     res.x = res.x[:m]
     return res
 
 
-def simplex_method_canon(A, b, c, search_min=True) -> LinearProgrammingMethodResults:
+def simplex_method_canon(A, b, c, search_min=True) -> Optional[LinearProgrammingMethodResults]:
     n, m = np.shape(A)
 
     c = np.array(c, np.float)
@@ -80,7 +82,7 @@ def simplex_method_canon(A, b, c, search_min=True) -> LinearProgrammingMethodRes
                 r = i
                 cur_min = resolving_col[i]
         if r == -1:
-            return LinearProgrammingMethodResults(False, q0, [], search_min)
+            return None
 
         # нашли разрешаюший элемент
         resolving_el = A[r][l]
@@ -101,15 +103,15 @@ def simplex_method_canon(A, b, c, search_min=True) -> LinearProgrammingMethodRes
 
     # если значение функции оказалось больше M, то метод разошелся
     if abs(q0) > M:
-        return LinearProgrammingMethodResults(False, q0, [], search_min)
+        return None
 
     x = np.zeros(m)
     for i in range(n):
         r = basis[i]
         # если добавочная переменная вошла в базис и не зануляется, то решения не существует
         if r >= m and abs(b[i] / A[i][r]) > eps:
-            return LinearProgrammingMethodResults(False, q0, x, search_min)
+            return None
         else:
             # если переменная не добавочная, то просто расчитываем ее
             x[r] = b[i] / A[i][r]
-    return LinearProgrammingMethodResults(True, q0, x, search_min)
+    return LinearProgrammingMethodResults(q0, x, search_min)
