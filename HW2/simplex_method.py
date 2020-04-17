@@ -17,7 +17,7 @@ class LinearProgrammingMethodResults:
 
 
 def simplex_method_noncanon(a, b, c, search_min=True) -> LinearProgrammingMethodResults:
-    n, m = np.shape(A)
+    n, m = np.shape(a)
 
     # добавим единичную матрицу чтобы перевести неравенства в равенства
     a = np.hstack((np.array(a, np.float), np.eye(n)))
