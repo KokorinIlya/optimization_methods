@@ -16,7 +16,7 @@ class LinearProgrammingMethodResults:
                'x: {}\n'.format(self.success, self.value if self.search_min else -self.value, self.x)
 
 
-def simplex_method_noncanon(a, b, c, search_min=True):
+def simplex_method_noncanon(a, b, c, search_min=True) -> LinearProgrammingMethodResults:
     n, m = np.shape(A)
 
     # добавим единичную матрицу чтобы перевести неравенства в равенства
@@ -30,7 +30,7 @@ def simplex_method_noncanon(a, b, c, search_min=True):
     return res
 
 
-def simplex_method_canon(A, b, c, search_min=True):
+def simplex_method_canon(A, b, c, search_min=True) -> LinearProgrammingMethodResults:
     n, m = np.shape(A)
 
     c = np.array(c, np.float)
