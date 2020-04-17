@@ -107,7 +107,7 @@ def simplex_method_canon(A, b, c, search_min=True) -> LinearProgrammingMethodRes
     for i in range(n):
         r = basis[i]
         # если добавочная переменная вошла в базис и не зануляется, то решения не существует
-        if r >= m and b[i] / A[i][r] > eps:
+        if r >= m and abs(b[i] / A[i][r]) > eps:
             return LinearProgrammingMethodResults(False, q0, x, search_min)
         else:
             # если переменная не добавочная, то просто расчитываем ее
