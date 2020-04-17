@@ -153,3 +153,13 @@ b = [1, 3, 1]
 c = [-1, 1, -2, 1, 5]
 
 print(simplex_method_canon(A, b, c, True))
+
+A = [[4, 3],
+     [-4, 3],
+     [1, 0],
+     [0, -1]]
+
+b = [22, 2, 2, -4]
+c = [-5, -4]
+
+print(simplex_method_noncanon(A, b, c, False))
